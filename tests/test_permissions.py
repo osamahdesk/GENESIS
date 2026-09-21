@@ -19,3 +19,6 @@ def test_dashboard_explains_permission_boundary():
     assert "Permission center" in page
     assert "Safe by default" in page
     assert "data-hint" in page
+    assert "Transformers" in page
+    assert "AI Builder" in page
+    assert "type='submit'" in page

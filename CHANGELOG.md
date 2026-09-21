@@ -19,3 +19,10 @@
 - Added a guided dashboard with clickable teaching hints and a visible permission center.
 - Added explicit deny-by-default permission policy and CLI inspection/grant commands.
 - Verified the local model through the provider boundary and kept the default suite independent of heavyweight dependencies.
+
+## Guided capabilities and AI Builder
+
+- Added reversible dashboard toggles for Transformers, PyTorch, Hugging Face, AI Builder, and model training.
+- Added a deny-by-default capability policy with explicit user confirmation state.
+- Added a sandbox-only AI Builder that writes reviewable model-project proposals without executing generated code.
+- Verified the UI toggle path through the local HTTP dashboard.

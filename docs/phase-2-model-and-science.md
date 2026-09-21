@@ -12,6 +12,7 @@ Phase 2 introduces a real small local language model without weakening GENESIS's
 4. Compare mock, local-model, and future API-backed workflows under explicit budgets.
 5. Add repeated trials, validation/hidden split reporting, cost and latency metrics, and failure preservation.
 6. Add a frozen baseline and regression gate before strategy evolution.
+7. Expose reversible UI toggles for model libraries and controlled AI Builder proposals.
 
 ## Model choice
 
@@ -24,3 +25,5 @@ The deterministic mock path remains the default because it is stable, fast, and 
 ## Acceptance criteria
 
 Phase 2 is complete only when the local model can be loaded from the committed files, a generation call returns provider metadata, and the same repository still passes its default offline test suite without the optional dependency.
+
+The development controls follow the same boundary. A capability toggle records intent; it does not install or execute untrusted code. AI Builder creates a candidate proposal in the sandbox and leaves evaluation and promotion to later gates.

@@ -155,6 +155,8 @@ http://127.0.0.1:8765
 
 The dashboard shows the latest status, score, test count, workflow, experiment identity, evidence snapshot, and a short hint explaining the next action. Highlighted cards and workflow steps are clickable: a small teaching bubble explains what the selected element means and how it connects to the experiment. A Permission Center makes the deny-by-default boundary visible. It uses the same local SQLite records as the CLI and does not require an external service.
 
+The Permission Center also exposes reversible ON/OFF controls for `Transformers`, `PyTorch`, `Hugging Face`, `AI Builder`, and `Model Training`. A toggle changes the experiment policy; it does not silently install packages, execute generated code, or grant host access. When `AI Builder` is enabled, GENESIS can create a reviewable model-project proposal inside the sandbox. The proposal must be evaluated before any future execution or promotion.
+
 ## Design principles
 
 ### Evidence over conversation
