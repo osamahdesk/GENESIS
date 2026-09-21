@@ -2,7 +2,7 @@
 
 | Day | Focus | Status |
 |---:|---|---|
-| 01 | Foundation and runnable package | IN_PROGRESS |
+| 01 | Foundation and runnable package | COMPLETE |
 | 02 | Typed task, strategy, and experiment schemas | PLANNED |
 | 03 | Events, logging, and status transitions | PLANNED |
 | 04 | Offline mock provider and configuration | PLANNED |

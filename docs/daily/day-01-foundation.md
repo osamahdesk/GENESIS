@@ -1,6 +1,6 @@
 # Day 01 — Foundation
 
-**Status:** `IN_PROGRESS`
+**Status:** `COMPLETE`
 
 ## Objective
 
@@ -32,10 +32,10 @@ Create a clean Python package, development configuration, repository structure, 
 
 ## Acceptance criteria
 
-- [ ] `python -m genesis` runs without credentials.
-- [ ] The package installs in editable mode.
-- [ ] The smoke test passes.
-- [ ] No secret is required for the first command.
+- [x] `python -m genesis` runs without credentials.
+- [x] The package installs in editable mode.
+- [x] The smoke test passes.
+- [x] No secret is required for the first command.
 
 ## Tests
 
@@ -44,9 +44,11 @@ python -m genesis
 python -m pytest
 ```
 
+Result: `1 passed`.
+
 ## Implementation notes
 
-The daily file is updated as implementation progresses. Later-day features must not be added here.
+The repository was initialized with a public-facing README, approved v0.1 specification, architecture, evaluation protocol, security model, roadmap, work tree, and daily-file system. The first CLI command is offline and does not require a provider credential.
 
 ## Blockers
 
@@ -54,4 +56,4 @@ None.
 
 ## Final status
 
-`IN_PROGRESS`
+`COMPLETE`
