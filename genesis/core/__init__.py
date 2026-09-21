@@ -11,6 +11,7 @@ from .models import (
     Task,
 )
 from .events import DomainEvent, allowed_transitions, transition_experiment
+from .permissions import PermissionPolicy
 from .coordinator import Coordinator
 
 __all__ = [
@@ -22,6 +23,7 @@ __all__ = [
     "Experiment",
     "ExperimentStatus",
     "Metric",
+    "PermissionPolicy",
     "Strategy",
     "Task",
     "allowed_transitions",

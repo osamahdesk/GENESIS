@@ -33,7 +33,7 @@ The repository currently contains a runnable **v0.1 development core**:
 | End-to-end Coordinator | Implemented |
 | CLI commands | Implemented |
 | Local GitHub-style dashboard | Implemented |
-| External model providers and Hugging Face datasets | Deferred to the provider/benchmark phase |
+| Included local Hugging Face checkpoint and provider | Implemented as an optional integration |
 | Strategy evolution and dynamic roles | Deferred until the baseline is scientifically measured |
 
 The current example is deliberately deterministic. It establishes a reproducible baseline before external model variability is introduced.
@@ -153,7 +153,7 @@ Open:
 http://127.0.0.1:8765
 ```
 
-The dashboard shows the latest status, score, test count, workflow, experiment identity, evidence snapshot, and a short hint explaining the next action. It uses the same local SQLite records as the CLI and does not require an external service.
+The dashboard shows the latest status, score, test count, workflow, experiment identity, evidence snapshot, and a short hint explaining the next action. Highlighted cards and workflow steps are clickable: a small teaching bubble explains what the selected element means and how it connects to the experiment. A Permission Center makes the deny-by-default boundary visible. It uses the same local SQLite records as the CLI and does not require an external service.
 
 ## Design principles
 
@@ -253,7 +253,15 @@ The current development core includes unit, lifecycle, evaluation, end-to-end, a
 
 ## Hugging Face integration
 
-Hugging Face is intentionally not required by the current offline core. It becomes useful when the project reaches the provider and benchmark phase, where it can provide open models, datasets, and reproducible benchmark sources. The provider boundary allows that integration to be added without changing the experiment schema or evaluator contract.
+Phase 2 includes the small [`sshleifer/tiny-gpt2`](models/sshleifer-tiny-gpt2) checkpoint from Hugging Face. The files are committed with a `SHA256SUMS` manifest, and [`HuggingFaceLocalProvider`](genesis/providers/huggingface_local.py) loads them from disk through the same provider boundary used by the mock provider.
+
+The integration is optional because PyTorch and Transformers are heavyweight dependencies compared with the deterministic core. Install it only when you want to run the local model:
+
+```bash
+pip install -e '.[hf]'
+```
+
+The default test suite and offline baseline still work without the `hf` extra. This separation lets GENESIS use a real model while preserving clean, fast, reproducible development for the rest of the project. The model is intentionally a tiny integration checkpoint, not a claim of production-quality generation.
 
 ## Contributing
 

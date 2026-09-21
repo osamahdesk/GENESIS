@@ -2,9 +2,10 @@ from __future__ import annotations
 
 import argparse
 import json
+from dataclasses import asdict
 from pathlib import Path
 
-from genesis.core import Coordinator
+from genesis.core import Coordinator, PermissionPolicy
 from genesis.evaluation import IndependentEvaluator
 
 
@@ -21,6 +22,10 @@ def build_parser() -> argparse.ArgumentParser:
     dashboard.add_argument("--root", default=".genesis")
     dashboard.add_argument("--host", default="127.0.0.1")
     dashboard.add_argument("--port", type=int, default=8765)
+    permissions = subparsers.add_parser("permissions", help="show or explicitly grant limited permissions")
+    permissions.add_argument("--root", default=".genesis")
+    permissions.add_argument("--grant-project-filesystem", action="store_true")
+    permissions.add_argument("--grant-read-only-network", action="store_true")
     experiment = subparsers.add_parser("experiment", help="inspect one experiment")
     experiment.add_argument("experiment_id")
     experiment.add_argument("--root", default=".genesis")
@@ -44,6 +49,17 @@ def main(argv: list[str] | None = None) -> int:
         from genesis.ui import serve
 
         serve(args.root, args.host, args.port)
+        return 0
+    if args.command == "permissions":
+        path = Path(args.root) / "permissions.json"
+        policy = PermissionPolicy.load(path)
+        if args.grant_project_filesystem:
+            policy.grant_project_filesystem()
+        if args.grant_read_only_network:
+            policy.grant_read_only_network()
+        if args.grant_project_filesystem or args.grant_read_only_network:
+            policy.save(path)
+        print(json.dumps(asdict(policy), indent=2, default=str))
         return 0
     if args.command == "experiment":
         record = Coordinator(args.root).db.get_experiment(args.experiment_id)

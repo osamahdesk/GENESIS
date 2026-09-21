@@ -14,7 +14,7 @@
 | 10 | Critic and failure classification | COMPLETE |
 | 11 | Coordinator and complete lifecycle | COMPLETE |
 | 12 | First end-to-end experiment | COMPLETE |
-| 13 | Reproducibility identity and bundle | PLANNED |
+| 13 | Hugging Face local provider and model checkpoint | COMPLETE |
 | 14 | Development, validation, and hidden splits | PLANNED |
 | 15 | Baselines and repeated trials | PLANNED |
 | 16 | Cost, latency, and resource metrics | PLANNED |
