@@ -6,6 +6,40 @@ GENESIS مشروع مفتوح المصدر يدرس ما إذا كان التع�
 
 المشروع لا يدّعي أنه AGI، ولا يدّعي الوعي، ولا يمنح الوكلاء صلاحيات غير محدودة. السؤال الأول للمشروع أصغر وقابل للاختبار:
 
+## مكتبة Python الرسمية
+
+أصبحت GENESIS متاحة كمكتبة Python رسمية باسم `genesis-agi` على [PyPI](https://pypi.org/project/genesis-agi/)، والإصدار الحالي هو **0.1.3**.
+
+التثبيت:
+
+```bash
+pip install genesis-agi
+```
+
+ثم التشغيل:
+
+```bash
+genesis --version
+genesis init
+genesis run
+genesis dashboard
+```
+
+اسم الاستيراد داخل Python هو `genesis`:
+
+```python
+from genesis.providers import MockProvider
+
+response = MockProvider().generate("hello")
+print(response.text)
+```
+
+ولإضافة تكامل Hugging Face الاختياري:
+
+```bash
+pip install "genesis-agi[hf]"
+```
+
 > **هل يستطيع نظام منظم أن يقترح حلًا، ويبنيه، ويختبره، وينتقده، ويحفظ نتائجه، ثم يقارن بين الاستراتيجيات مع توضيح سبب قبول إحداها؟**
 
 ![معمارية GENESIS](docs/images/architecture.png)
@@ -18,7 +52,7 @@ GENESIS مشروع مفتوح المصدر يدرس ما إذا كان التع�
 
 ## الحالة الحالية
 
-يحتوي المستودع على قلب تشغيلي لـ `v0.1`:
+يحتوي المستودع على الإصدار التشغيلي المنشور `v0.1.3`:
 
 | الميزة | الحالة |
 |---|---|

@@ -6,6 +6,38 @@ GENESIS is an open-source research framework for studying whether structured col
 
 It is intentionally not marketed as AGI, consciousness, or unrestricted autonomous intelligence. The project starts with a smaller and testable question:
 
+## Official Python package
+
+GENESIS is available as the official `genesis-agi` Python distribution on [PyPI](https://pypi.org/project/genesis-agi/). The current release is **0.1.3**.
+
+```bash
+pip install genesis-agi
+```
+
+Then run:
+
+```bash
+genesis --version
+genesis init
+genesis run
+genesis dashboard
+```
+
+The Python import namespace is `genesis`:
+
+```python
+from genesis.providers import MockProvider
+
+response = MockProvider().generate("hello")
+print(response.text)
+```
+
+For the optional local Hugging Face integration:
+
+```bash
+pip install "genesis-agi[hf]"
+```
+
 > **Can an AI workflow propose, build, test, critique, remember, and compare solutions while preserving enough evidence to explain why one strategy was accepted?**
 
 ![GENESIS architecture](docs/images/architecture.png)
@@ -18,7 +50,7 @@ The project therefore treats every claimed improvement as a scientific claim. It
 
 ## Current status
 
-The repository currently contains a runnable **v0.1 development core**:
+The repository currently contains the runnable **v0.1.3 Python package release**:
 
 | Capability | Current state |
 |---|---|
