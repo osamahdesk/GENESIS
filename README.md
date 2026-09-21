@@ -8,7 +8,7 @@ It is intentionally not marketed as AGI, consciousness, or unrestricted autonomo
 
 ## Official Python package
 
-GENESIS is available as the official `genesis-agi` Python distribution on [PyPI](https://pypi.org/project/genesis-agi/). The current release is **0.1.3**.
+GENESIS is available as the official `genesis-agi` Python distribution on [PyPI](https://pypi.org/project/genesis-agi/). The current release is **0.2.0**.
 
 ```bash
 pip install genesis-agi
@@ -50,7 +50,7 @@ The project therefore treats every claimed improvement as a scientific claim. It
 
 ## Current status
 
-The repository currently contains the runnable **v0.1.3 Python package release**:
+The repository currently contains the runnable **v0.2.0 Python package release**:
 
 | Capability | Current state |
 |---|---|
@@ -66,6 +66,9 @@ The repository currently contains the runnable **v0.1.3 Python package release**
 | CLI commands | Implemented |
 | Local GitHub-style dashboard | Implemented |
 | Included local Hugging Face checkpoint and provider | Implemented as an optional integration |
+| Versioned experiment identity, benchmark split registry, and learning-curve metrics | Implemented in the adaptive core |
+| Skill contracts, dynamic planning, strategy memory, and evidence graph | Implemented in the adaptive core |
+| Central policy engine and external kill switch | Implemented as safety foundations |
 | Strategy evolution and dynamic roles | Deferred until the baseline is scientifically measured |
 
 The current example is deliberately deterministic. It establishes a reproducible baseline before external model variability is introduced.

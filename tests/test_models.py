@@ -1,4 +1,4 @@
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 import pytest
 
@@ -57,7 +57,7 @@ def test_experiment_terminal_status_records_completion():
 
     assert experiment.status is ExperimentStatus.REJECTED
     assert isinstance(experiment.completed_at, datetime)
-    assert experiment.completed_at.tzinfo is timezone.utc
+    assert experiment.completed_at.tzinfo is UTC
 
 
 def test_experiment_rejects_duplicate_artifacts():

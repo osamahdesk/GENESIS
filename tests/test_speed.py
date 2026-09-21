@@ -1,7 +1,5 @@
-import time
 
 from genesis.evaluation import CASES, IndependentEvaluator
-
 
 SOURCE = "import json\nn = int(json.load(__import__('sys').stdin))\nprint(json.dumps(n * (n + 1) * (2 * n + 1) // 6))\n"
 

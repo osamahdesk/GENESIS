@@ -20,13 +20,13 @@ Days 13–18 add benchmark splits, hidden evaluation, reproducibility identity, 
 
 Days 19–24 add the CLI, configuration, error handling, safety tests, documentation, clean-install verification, and a public example. The release is made only when the acceptance criteria in `docs/v0.1-spec.md` pass.
 
-## Phase 4 — Strategy evolution
+## Phase 4 — Auditable adaptive core
 
-Days 25–35 introduce a versioned Strategy object, one mutation operator, frozen parents, candidate selection, regression gates, failure memory, and ablation reports.
+The next milestone introduces the versioned experiment identity, benchmark split registry, skill contracts, dynamic planning, strategy memory, evidence assessment, risk policy decisions, an external kill switch, and multidimensional learning-curve metrics. Every adaptive change must remain comparable to a frozen baseline.
 
-## Phase 5 — Research extensions
+## Phase 5 — Strategy evolution
 
-After v0.1 is stable, investigate dynamic roles, tool experiments, capability-gap analysis, and knowledge graphs. These are separate research milestones, not prerequisites for the first release.
+Introduce one mutation operator, frozen parents, candidate selection, regression gates, failure memory, repeated trials, and ablation reports. A strategy is promoted only when its quality-adjusted utility improves without adding safety violations.
 
 ## Phase 6 — Controlled external research
 

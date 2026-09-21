@@ -2,15 +2,18 @@ from __future__ import annotations
 
 import html
 import json
-from urllib.parse import parse_qs, parse_qsl, urlparse
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from typing import Any
+from urllib.parse import parse_qs, parse_qsl, urlparse
 
 from genesis.core import Coordinator, PermissionPolicy
 from genesis.providers.huggingface_api import search_public_models
-from genesis.providers.model_onboarding import load_teacher, recommended_models, select_teacher
-
+from genesis.providers.model_onboarding import (
+    load_teacher,
+    recommended_models,
+    select_teacher,
+)
 
 STYLE = """
 :root{color-scheme:light;--bg:#f6f8fa;--panel:#fff;--ink:#1f2328;--muted:#656d76;--line:#d0d7de;--accent:#0969da;--green:#1a7f37;--orange:#9a6700;--purple:#8250df}
@@ -58,7 +61,7 @@ def serve(root: str | Path = ".genesis", host: str = "127.0.0.1", port: int = 87
     record = {"experiment": records[-1], "evaluation": records[-1].get("metadata", {}).get("evaluation", {})} if records else None
 
     class Handler(BaseHTTPRequestHandler):
-        def do_GET(self) -> None:  # noqa: N802
+        def do_GET(self) -> None:
             query = dict(parse_qsl(urlparse(self.path).query))
             search_results = None
             search_message = ""
@@ -69,7 +72,7 @@ def serve(root: str | Path = ".genesis", host: str = "127.0.0.1", port: int = 87
                     try:
                         search_results = search_public_models(query["search"])
                         search_message = f"Found {len(search_results)} public text-generation models."
-                    except Exception as error:  # network errors stay inside the UI
+                    except (OSError, ValueError) as error:  # network errors stay inside the UI
                         search_message = f"Public search unavailable: {error}"
             body = render_dashboard(record, policy, teacher, memory_gb, search_results, search_message).encode("utf-8")
             self.send_response(200)
@@ -78,7 +81,7 @@ def serve(root: str | Path = ".genesis", host: str = "127.0.0.1", port: int = 87
             self.end_headers()
             self.wfile.write(body)
 
-        def do_POST(self) -> None:  # noqa: N802
+        def do_POST(self) -> None:
             length = int(self.headers.get("Content-Length", "0"))
             fields = parse_qs(self.rfile.read(length).decode("utf-8"))
             name = fields.get("capability", [""])[0]
@@ -86,7 +89,7 @@ def serve(root: str | Path = ".genesis", host: str = "127.0.0.1", port: int = 87
             teacher_source = fields.get("teacher_source", [""])[0]
             if teacher_source:
                 try:
-                    teacher = select_teacher(teacher_source, root)
+                    select_teacher(teacher_source, root)
                 except ValueError as error:
                     self.send_error(400, str(error))
                     return

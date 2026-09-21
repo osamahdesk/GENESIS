@@ -1,5 +1,7 @@
 """Core experiment schemas and orchestration."""
 
+from .events import DomainEvent, allowed_transitions, transition_experiment
+from .identity import ExperimentIdentity
 from .models import (
     ArtifactKind,
     ArtifactRef,
@@ -10,7 +12,6 @@ from .models import (
     Strategy,
     Task,
 )
-from .events import DomainEvent, allowed_transitions, transition_experiment
 from .permissions import PermissionPolicy
 
 __all__ = [
@@ -20,6 +21,7 @@ __all__ = [
     "Coordinator",
     "DomainEvent",
     "Experiment",
+    "ExperimentIdentity",
     "ExperimentStatus",
     "Metric",
     "PermissionPolicy",

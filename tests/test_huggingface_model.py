@@ -2,7 +2,6 @@ from pathlib import Path
 
 from genesis.providers.huggingface_local import HuggingFaceLocalProvider
 
-
 MODEL_DIR = Path(__file__).parents[1] / "models" / "sshleifer-tiny-gpt2"
 
 

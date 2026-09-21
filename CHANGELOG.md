@@ -61,3 +61,7 @@ The evaluation cache schema version is now part of the cache key. Results create
 ## 0.1.3 public API hardening
 
 The package now exposes `normalize_source` from `genesis.providers`, adds a root `genesis.__version__`, and includes a mobile-safe library smoke example. Public import coverage now runs in CI so missing exports are caught before a PyPI release.
+
+## 0.2.0 — Auditable adaptive core
+
+Added versioned experiment identity, benchmark split protection, skill contracts, dynamic planning, strategy memory for successes and failures, evidence confidence and contradiction assessment, a centralized risk policy engine, an external kill switch, multidimensional learning-curve metrics, and a regression-gated improvement loop. The Coordinator now records its plan, identity fingerprint, and lessons alongside every experiment.

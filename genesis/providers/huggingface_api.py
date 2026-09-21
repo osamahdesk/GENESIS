@@ -4,7 +4,6 @@ import json
 from urllib.parse import quote
 from urllib.request import Request, urlopen
 
-
 API_URL = "https://huggingface.co/api/models"
 
 

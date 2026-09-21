@@ -8,7 +8,6 @@ from typing import Any
 
 from .models import Experiment, ExperimentStatus, utc_now
 
-
 _ALLOWED_TRANSITIONS: dict[ExperimentStatus, frozenset[ExperimentStatus]] = {
     ExperimentStatus.CREATED: frozenset({ExperimentStatus.RESEARCHING, ExperimentStatus.FAILED}),
     ExperimentStatus.RESEARCHING: frozenset({ExperimentStatus.BUILDING, ExperimentStatus.FAILED}),

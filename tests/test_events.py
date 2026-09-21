@@ -1,6 +1,11 @@
 import pytest
 
-from genesis.core import DomainEvent, Experiment, ExperimentStatus, transition_experiment
+from genesis.core import (
+    DomainEvent,
+    Experiment,
+    ExperimentStatus,
+    transition_experiment,
+)
 
 
 def make_experiment() -> Experiment:

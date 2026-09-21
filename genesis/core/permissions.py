@@ -4,7 +4,6 @@ import json
 from dataclasses import asdict, dataclass, field
 from pathlib import Path
 
-
 DEVELOPMENT_CAPABILITIES = (
     "transformers",
     "pytorch",
@@ -53,7 +52,7 @@ class PermissionPolicy:
         target.write_text(json.dumps(self.as_dict(), indent=2) + "\n", encoding="utf-8")
 
     @classmethod
-    def load(cls, path: str | Path) -> "PermissionPolicy":
+    def load(cls, path: str | Path) -> PermissionPolicy:
         target = Path(path)
         if not target.exists():
             return cls()

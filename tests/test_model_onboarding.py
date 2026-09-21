@@ -1,4 +1,8 @@
-from genesis.providers.model_onboarding import normalize_source, recommended_models, select_teacher
+from genesis.providers.model_onboarding import (
+    normalize_source,
+    recommended_models,
+    select_teacher,
+)
 
 
 def test_model_source_normalization(tmp_path):
