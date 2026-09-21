@@ -12,7 +12,6 @@ from .models import (
 )
 from .events import DomainEvent, allowed_transitions, transition_experiment
 from .permissions import PermissionPolicy
-from .coordinator import Coordinator
 
 __all__ = [
     "ArtifactKind",
@@ -29,3 +28,11 @@ __all__ = [
     "allowed_transitions",
     "transition_experiment",
 ]
+
+
+def __getattr__(name: str):
+    if name == "Coordinator":
+        from .coordinator import Coordinator
+
+        return Coordinator
+    raise AttributeError(name)

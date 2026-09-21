@@ -20,7 +20,7 @@ class Coordinator:
         self.researcher = Researcher()
         self.builder = Builder()
         self.critic = Critic()
-        self.evaluator = IndependentEvaluator()
+        self.evaluator = IndependentEvaluator(cache_dir=self.root / "evaluation-cache")
 
     def run_once(self, experiment_id: str = "EXP-000001") -> dict[str, object]:
         strategy = Strategy("baseline-v1", "Direct baseline", "1", ("research", "build", "evaluate"))

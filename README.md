@@ -98,6 +98,29 @@ A successful run produces a structured report similar to:
 
 This result means that the current baseline passed the current example benchmark. It does **not** mean that the system became generally intelligent or that a model improved itself. The next scientific comparison is a model-backed candidate against this frozen baseline under equal budgets.
 
+## Performance engineering
+
+GENESIS treats speed as a measured property. The evaluator now supports per-case isolated execution, accelerated batch execution in one isolated worker with a fresh namespace per case, and hash-keyed result caching. The local model provider also uses evaluation mode, inference mode, and key/value caching during generation.
+
+On the included seven-case benchmark, the measured results were:
+
+| Path | Wall time | Result |
+|---|---:|---|
+| Per-case isolated evaluation | 0.327261 s | 7/7, score 1.0 |
+| Accelerated batch evaluation | 0.047891 s | 7/7, score 1.0 |
+| In-memory repeated evaluation | 0.000051 s | Cache hit, score 1.0 |
+
+That run measured a **6.83×** batch improvement and approximately **939×** for an in-memory repeated evaluation. These are workload-specific measurements, not universal promises. End-to-end CLI time also includes interpreter startup, SQLite writes, artifact hashing, and output rendering.
+
+Reproduce the measurements with:
+
+```bash
+python tools/benchmark_speed.py
+python tools/benchmark_cli_cache.py
+```
+
+The isolated path remains available for hostile or untrusted artifacts; performance optimizations never bypass evaluation or the safety boundary.
+
 See the full example in [`docs/example-result.md`](docs/example-result.md).
 
 ## Quick start

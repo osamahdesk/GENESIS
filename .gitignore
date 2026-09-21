@@ -9,4 +9,5 @@ __pycache__/
 *.sqlite3
 runs/
 artifacts/
+.genesis/
 .DS_Store

@@ -29,12 +29,16 @@ class HuggingFaceLocalProvider:
             ) from error
         self._tokenizer = AutoTokenizer.from_pretrained(self.model_path, local_files_only=True)
         self._model = AutoModelForCausalLM.from_pretrained(self.model_path, local_files_only=True)
+        self._model.eval()
 
     def generate(self, prompt: str, max_new_tokens: int = 32) -> ModelResponse:
         if self._model is None or self._tokenizer is None:
             self._load()
         inputs = self._tokenizer(prompt, return_tensors="pt")
-        outputs = self._model.generate(**inputs, max_new_tokens=max_new_tokens, do_sample=False)
+        import torch
+
+        with torch.inference_mode():
+            outputs = self._model.generate(**inputs, max_new_tokens=max_new_tokens, do_sample=False, use_cache=True)
         text = self._tokenizer.decode(outputs[0], skip_special_tokens=True)
         return ModelResponse(
             text=text,

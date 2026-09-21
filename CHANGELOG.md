@@ -26,3 +26,11 @@
 - Added a deny-by-default capability policy with explicit user confirmation state.
 - Added a sandbox-only AI Builder that writes reviewable model-project proposals without executing generated code.
 - Verified the UI toggle path through the local HTTP dashboard.
+
+## Performance engineering
+
+- Added accelerated batch evaluation with a separate worker and fresh namespace per case.
+- Added in-memory and persistent hash-keyed evaluation caching.
+- Added inference-mode and evaluation-mode optimizations for the local model provider.
+- Added reproducible speed benchmarks and documented the measured batch and cache improvements.
+- Kept isolated per-case execution available for untrusted artifacts.

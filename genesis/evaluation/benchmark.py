@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from genesis.core import Task
+from genesis.core.models import Task
 
 
 @dataclass(frozen=True, slots=True)
