@@ -3,19 +3,36 @@ requires = ["setuptools>=68"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "genesis-ai"
-version = "0.1.0.dev0"
-description = "Reproducible multi-agent AI experimentation framework"
+name = "genesis-agi"
+version = "0.1.0"
+description = "A measurable framework for AGI-oriented multi-agent experiments"
 readme = "README.md"
 requires-python = ">=3.11"
-license = {file = "LICENSE"}
+license = "MIT"
+license-files = ["LICENSE"]
 authors = []
 dependencies = []
+keywords = ["ai", "agi", "agents", "multi-agent", "experiments", "evaluation", "huggingface"]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Intended Audience :: Science/Research",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.11",
+  "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+
+[project.urls]
+Homepage = "https://github.com/osamahdesk/GENESIS"
+Repository = "https://github.com/osamahdesk/GENESIS"
+Documentation = "https://github.com/osamahdesk/GENESIS/tree/main/docs"
+Issues = "https://github.com/osamahdesk/GENESIS/issues"
 
 [project.optional-dependencies]
 dev = [
   "pytest>=8.0",
   "ruff>=0.6",
+  "build>=1.2",
+  "twine>=5.0",
 ]
 hf = [
   "transformers>=4.40",

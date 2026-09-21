@@ -1,6 +1,6 @@
 project:
   name: genesis
-  version: 0.1.0.dev0
+  version: 0.1.0
 
 mode: offline-mock
 

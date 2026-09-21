@@ -42,3 +42,10 @@
 - Added persistent `teacher.json` selection records.
 - Added explicit public Hugging Face Hub API search with read-only permission gating.
 - Added dashboard `Use` actions for search results and teacher selection.
+
+## PyPI packaging preparation
+
+- Renamed the distribution to `genesis-agi` and set the first release version to `0.1.0`.
+- Added PyPI metadata, project URLs, classifiers, keywords, and release tooling.
+- Added the TestPyPI and production release guide.
+- Built and validated the wheel and source distribution with `twine check`.
