@@ -11,7 +11,7 @@ from genesis.evaluation import IndependentEvaluator
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="genesis", description="Run reproducible GENESIS AI experiments.")
-    parser.add_argument("--version", action="version", version="genesis 0.1.2")
+    parser.add_argument("--version", action="version", version="genesis 0.1.3")
     subparsers = parser.add_subparsers(dest="command")
     subparsers.add_parser("init", help="create the local GENESIS directory")
     run = subparsers.add_parser("run", help="run one offline baseline experiment")

@@ -57,3 +57,7 @@ The evaluator now detects when accelerated batch execution produces no usable ou
 ## 0.1.2 cache invalidation fix
 
 The evaluation cache schema version is now part of the cache key. Results created by older evaluator behavior cannot be reused after a compatibility fix, preventing stale mobile failures from being reported as fresh evaluations.
+
+## 0.1.3 public API hardening
+
+The package now exposes `normalize_source` from `genesis.providers`, adds a root `genesis.__version__`, and includes a mobile-safe library smoke example. Public import coverage now runs in CI so missing exports are caught before a PyPI release.
