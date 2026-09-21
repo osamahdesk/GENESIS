@@ -4,7 +4,7 @@
 |---:|---|---|
 | 01 | Foundation and runnable package | COMPLETE |
 | 02 | Typed task, strategy, and experiment schemas | COMPLETE |
-| 03 | Events, logging, and status transitions | PLANNED |
+| 03 | Events, logging, and status transitions | COMPLETE |
 | 04 | Offline mock provider and configuration | PLANNED |
 | 05 | SQLite metadata store and artifact references | PLANNED |
 | 06 | Independent benchmark evaluator | PLANNED |
