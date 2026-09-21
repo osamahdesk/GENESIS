@@ -3,7 +3,7 @@
 | Day | Focus | Status |
 |---:|---|---|
 | 01 | Foundation and runnable package | COMPLETE |
-| 02 | Typed task, strategy, and experiment schemas | PLANNED |
+| 02 | Typed task, strategy, and experiment schemas | COMPLETE |
 | 03 | Events, logging, and status transitions | PLANNED |
 | 04 | Offline mock provider and configuration | PLANNED |
 | 05 | SQLite metadata store and artifact references | PLANNED |
