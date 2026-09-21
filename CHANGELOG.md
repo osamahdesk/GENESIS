@@ -53,3 +53,7 @@
 ## 0.1.1 mobile compatibility fix
 
 The evaluator now detects when accelerated batch execution produces no usable output, then retries the same cases through the portable isolated runner. This fixes Android/Termux environments where the batch worker can complete without returning captured stdout. The fallback is covered by a dedicated test.
+
+## 0.1.2 cache invalidation fix
+
+The evaluation cache schema version is now part of the cache key. Results created by older evaluator behavior cannot be reused after a compatibility fix, preventing stale mobile failures from being reported as fresh evaluations.

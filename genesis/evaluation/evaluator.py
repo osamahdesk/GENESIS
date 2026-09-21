@@ -9,6 +9,8 @@ from genesis.environment import RestrictedRunner
 
 from .benchmark import CASES, Case
 
+CACHE_SCHEMA_VERSION = "2"
+
 
 @dataclass(frozen=True, slots=True)
 class EvaluationResult:
@@ -44,7 +46,7 @@ class IndependentEvaluator:
             self.cache_dir.mkdir(parents=True, exist_ok=True)
 
     def evaluate(self, source: str, cases: tuple[Case, ...] = CASES) -> EvaluationResult:
-        key = hashlib.sha256((source + repr(cases) + str(self.accelerated)).encode()).hexdigest()
+        key = hashlib.sha256((CACHE_SCHEMA_VERSION + source + repr(cases) + str(self.accelerated)).encode()).hexdigest()
         cached = self._cache.get(key) or self._load_persistent(key)
         if cached:
             return EvaluationResult(cached.score, cached.passed, cached.total, cached.split_scores, cached.failures, 0, cached.execution_mode, True)
