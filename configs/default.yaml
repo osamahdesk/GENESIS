@@ -1,0 +1,25 @@
+project:
+  name: genesis
+  version: 0.1.0.dev0
+
+mode: offline-mock
+
+model:
+  provider: mock
+  model: deterministic-placeholder
+  temperature: 0
+
+experiment:
+  max_runtime_seconds: 60
+  max_model_calls: 10
+  max_retries: 1
+  max_disk_mb: 256
+
+safety:
+  network: false
+  filesystem: restricted
+  evaluator_isolation: required
+
+logging:
+  level: INFO
+  structured: true
