@@ -23,3 +23,27 @@ def test_evaluator_cache_returns_zero_work_runtime_on_repeat():
 
     assert cached.cache_hit is True
     assert cached.runtime_ms == 0
+
+
+class BrokenBatchRunner:
+    def run_batch(self, source, inputs):
+        from genesis.environment import RunResult
+
+        return [RunResult(1, "", "batch unavailable", False, 1) for _ in inputs]
+
+    def run(self, source, stdin=""):
+        from genesis.environment import RunResult
+
+        value = int(stdin)
+        return RunResult(0, str(value * value) + "\n", "", False, 1)
+
+
+def test_mobile_fallback_uses_isolated_runner_when_batch_has_no_output():
+    from genesis.evaluation import Case
+
+    cases = (Case(2, 4, "development"),)
+    evaluator = IndependentEvaluator(runner=BrokenBatchRunner(), accelerated=True)
+    result = evaluator.evaluate("ignored", cases)
+
+    assert result.score == 1.0
+    assert result.execution_mode == "batch-fallback-isolated"

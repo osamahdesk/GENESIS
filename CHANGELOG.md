@@ -49,3 +49,7 @@
 - Added PyPI metadata, project URLs, classifiers, keywords, and release tooling.
 - Added the TestPyPI and production release guide.
 - Built and validated the wheel and source distribution with `twine check`.
+
+## 0.1.1 mobile compatibility fix
+
+The evaluator now detects when accelerated batch execution produces no usable output, then retries the same cases through the portable isolated runner. This fixes Android/Termux environments where the batch worker can complete without returning captured stdout. The fallback is covered by a dedicated test.

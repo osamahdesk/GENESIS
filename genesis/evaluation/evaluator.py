@@ -49,7 +49,23 @@ class IndependentEvaluator:
         if cached:
             return EvaluationResult(cached.score, cached.passed, cached.total, cached.split_scores, cached.failures, 0, cached.execution_mode, True)
         inputs = [json.dumps(case.value) for case in cases]
-        results = self.runner.run_batch(source, inputs) if self.accelerated else [self.runner.run(source, value) for value in inputs]
+        execution_mode = "isolated"
+        if self.accelerated:
+            results = self.runner.run_batch(source, inputs)
+            # Some mobile Python builds restrict runpy/subprocess behavior. If
+            # the accelerated worker cannot produce a parseable case, retry
+            # with the portable per-case runner instead of rejecting the task.
+            batch_has_output = len(results) == len(inputs) and all(
+                result.returncode == 0 and not result.timed_out and result.stdout.strip()
+                for result in results
+            )
+            if not batch_has_output:
+                results = [self.runner.run(source, value) for value in inputs]
+                execution_mode = "batch-fallback-isolated"
+            else:
+                execution_mode = "batch"
+        else:
+            results = [self.runner.run(source, value) for value in inputs]
         passed = 0
         failures: list[str] = []
         split_totals: dict[str, list[int]] = {}
@@ -70,7 +86,7 @@ class IndependentEvaluator:
             else:
                 failures.append(f"{case.split}:{case.value}: expected {case.expected}, got {actual}")
         split_scores = {key: good / total for key, (good, total) in split_totals.items()}
-        result = EvaluationResult(passed / len(cases), passed, len(cases), split_scores, failures, runtime, "batch" if self.accelerated else "isolated")
+        result = EvaluationResult(passed / len(cases), passed, len(cases), split_scores, failures, runtime, execution_mode)
         self._cache[key] = result
         self._save_persistent(key, result)
         return result
