@@ -22,3 +22,5 @@ def test_dashboard_explains_permission_boundary():
     assert "Transformers" in page
     assert "AI Builder" in page
     assert "type='submit'" in page
+    assert "Teacher model" in page
+    assert "Search public catalog" in page

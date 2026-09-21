@@ -34,3 +34,11 @@
 - Added inference-mode and evaluation-mode optimizations for the local model provider.
 - Added reproducible speed benchmarks and documented the measured batch and cache improvements.
 - Kept isolated per-case execution available for untrusted artifacts.
+
+## Teacher model onboarding
+
+- Added memory-aware starter model recommendations.
+- Added model selection by Hub ID, public URL, or local directory.
+- Added persistent `teacher.json` selection records.
+- Added explicit public Hugging Face Hub API search with read-only permission gating.
+- Added dashboard `Use` actions for search results and teacher selection.

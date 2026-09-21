@@ -2,12 +2,14 @@ from __future__ import annotations
 
 import html
 import json
-from urllib.parse import parse_qs
+from urllib.parse import parse_qs, parse_qsl, urlparse
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from typing import Any
 
 from genesis.core import Coordinator, PermissionPolicy
+from genesis.providers.huggingface_api import search_public_models
+from genesis.providers.model_onboarding import load_teacher, recommended_models, select_teacher
 
 
 STYLE = """
@@ -18,7 +20,7 @@ STYLE = """
 CAPABILITY_STYLE = ".cap-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.cap-row{display:flex;justify-content:space-between;align-items:center;border:1px solid var(--line);border-radius:6px;padding:12px;background:var(--panel)}.toggle{border:0;border-radius:999px;padding:6px 12px;font-weight:650;cursor:pointer}.on{background:#dafbe1;color:var(--green)}.off{background:#f6f8fa;color:var(--muted)}.toggle:hover{filter:brightness(.96)}"
 
 
-def render_dashboard(record: dict[str, Any] | None, policy: PermissionPolicy | None = None) -> str:
+def render_dashboard(record: dict[str, Any] | None, policy: PermissionPolicy | None = None, teacher: Any = None, memory_gb: float = 0.0, search_results: list[dict[str, object]] | None = None, search_message: str = "") -> str:
     record = record or {}
     policy = policy or PermissionPolicy()
     evaluation = record.get("evaluation", {})
@@ -30,6 +32,9 @@ def render_dashboard(record: dict[str, Any] | None, policy: PermissionPolicy | N
     permission_json = html.escape(json.dumps(policy.__dict__ if hasattr(policy, "__dict__") else {"network": policy.network, "filesystem": policy.filesystem, "shell": policy.shell, "private_data": policy.private_data, "external_actions": policy.external_actions, "user_confirmed": policy.user_confirmed}, indent=2))
     capability_labels = {"transformers": "Transformers", "pytorch": "PyTorch", "huggingface": "Hugging Face", "ai_builder": "AI Builder", "model_training": "Model Training"}
     controls = "".join(f"<div class='cap-row'><span>{label}</span><form method='post'><input type='hidden' name='capability' value='{name}'><input type='hidden' name='enabled' value='{str(not policy.capabilities.get(name, False)).lower()}'><button class='toggle {'on' if policy.capabilities.get(name, False) else 'off'}' type='submit'>{'ON' if policy.capabilities.get(name, False) else 'OFF'}</button></form></div>" for name, label in capability_labels.items())
+    recommendations = "".join(f"<option value='{profile.repo_id}'>{profile.label} · {profile.approximate_parameters} · needs about {profile.min_ram_gb} GB RAM</option>" for profile in recommended_models(memory_gb))
+    teacher_text = html.escape(teacher.label + " (" + teacher.resolved_id + ")") if teacher else "No teacher selected"
+    search_rows = "".join(f"<tr><td><code>{html.escape(str(item.get('id', '')))}</code></td><td>{item.get('downloads', 0):,}</td><td>{item.get('likes', 0):,}</td><td><form method='post'><input type='hidden' name='teacher_source' value='{html.escape(str(item.get('id', '')))}'><button class='toggle on' type='submit'>Use</button></form></td></tr>" for item in (search_results or []))
     return f"""<!doctype html><html lang='en'><head><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>GENESIS Dashboard</title><style>{STYLE}{CAPABILITY_STYLE}</style></head><body>
 <header><b>◈ GENESIS</b><span>Experiment Dashboard · click any highlighted element for a hint</span></header>
 <div class='layout'><aside><h3>Workspace</h3><a class='active' href='/'>Overview</a><a href='#workflow'>Workflow</a><a href='#result'>Latest result</a><a href='#permissions'>Permissions</a><a href='#hints'>Getting started</a><h3>Project</h3><a href='https://github.com/osamahdesk/GENESIS'>Repository</a><a href='#'>Documentation</a></aside>
@@ -39,6 +44,8 @@ def render_dashboard(record: dict[str, Any] | None, policy: PermissionPolicy | N
 <section class='section columns' id='result'><div class='card'><h2>Latest experiment</h2><table class='table'><tr><td>Experiment</td><td><b>{html.escape(str(experiment.get('id','—')))}</b></td></tr><tr><td>Task</td><td>{html.escape(str(experiment.get('task_id','—')))}</td></tr><tr><td>Strategy</td><td>{html.escape(str(experiment.get('strategy_id','—')))}</td></tr><tr><td>Decision</td><td><span class='badge'>{html.escape(str(status))}</span></td></tr></table></div><div class='card' id='hints'><h2>Quick hint</h2><div class='hint'><b>Start here:</b> run <code>genesis run</code>, then open this dashboard. The result is stored in SQLite and the generated artifact is saved under <code>.genesis/artifacts</code>.</div><h2>Next research step</h2><p>Replace the deterministic baseline with a provider-backed candidate, then compare both under the same benchmark and budget.</p></div></section>
 <section class='section' id='permissions'><div class='card'><h2>Permission center</h2><div class='permission'><b>Safe by default.</b> GENESIS never grants direct host access just because the app opened. Permissions must be explicit, narrow, and user-confirmed. Current policy:</div><pre class='code'>{permission_json}</pre><p>To review or grant a limited permission from the terminal, use <code>genesis permissions</code>. The recommended first grant is project-only filesystem access, never the whole device.</p></div></section>
 <section class='section'><div class='card'><h2>Development capabilities</h2><p>Turn a capability on or off for the next experiment. The button changes policy only; it does not install packages or execute code.</p><div class='cap-grid'>{controls}</div></div></section>
+<section class='section'><div class='card' id='teacher'><h2>Teacher model</h2><p>Choose a starter model based on this machine's detected memory ({memory_gb} GB), type an exact model ID, paste a model URL, or point to a local model folder. Current selection: <b>{teacher_text}</b>.</p><form method='post'><input name='teacher_source' placeholder='owner/model, https://huggingface.co/owner/model, or /path/to/model' style='width:100%;padding:10px;margin:8px 0;border:1px solid var(--line);border-radius:6px'><button class='button' type='submit'>Use this Teacher</button></form><p><b>Suggested for this machine:</b></p><select onchange='document.querySelector("input[name=teacher_source]").value=this.value' style='width:100%;padding:10px;border:1px solid var(--line);border-radius:6px'><option value=''>Choose a suggestion</option>{recommendations}</select><p class='hint'>The Teacher proposes candidate projects; it does not silently copy itself, install code, or replace the evaluator. Candidates stay inside the sandbox until reviewed.</p></div></section>
+<section class='section'><div class='card'><h2>Public Hub search</h2><p>Search the public model catalog only when the Hugging Face capability is enabled and read-only network access is allowed.</p><form method='get'><input name='search' placeholder='for example: small instruction model' style='width:70%;padding:10px;border:1px solid var(--line);border-radius:6px'><button class='button' type='submit'>Search public catalog</button></form><p class='hint'>{html.escape(search_message)}</p>{"<table class='table'><tr><th>Model</th><th>Downloads</th><th>Likes</th><th></th></tr>" + search_rows + "</table>" if search_rows else ""}</div></section>
 <section class='section'><h2>Evidence snapshot</h2><pre class='code'>{html.escape(json.dumps(evaluation, indent=2, default=str))}</pre></section></main></div><script>document.querySelectorAll('[data-hint]').forEach(function(el){{el.addEventListener('click',function(){{document.querySelectorAll('.bubble').forEach(function(x){{x.remove()}});var b=document.createElement('div');b.className='bubble';b.textContent=el.dataset.hint;document.body.appendChild(b);var r=el.getBoundingClientRect();b.style.left=Math.min(r.left,window.innerWidth-330)+'px';b.style.top=Math.max(74,r.bottom+10)+'px';setTimeout(function(){{b.remove()}},6500)}})}});</script></body></html>"""
 
 
@@ -46,11 +53,25 @@ def serve(root: str | Path = ".genesis", host: str = "127.0.0.1", port: int = 87
     coordinator = Coordinator(root)
     records = coordinator.db.list_experiments()
     policy = PermissionPolicy.load(Path(root) / "permissions.json")
+    teacher = load_teacher(root)
+    memory_gb = __import__("genesis.providers.model_onboarding", fromlist=["available_memory_gb"]).available_memory_gb()
     record = {"experiment": records[-1], "evaluation": records[-1].get("metadata", {}).get("evaluation", {})} if records else None
 
     class Handler(BaseHTTPRequestHandler):
         def do_GET(self) -> None:  # noqa: N802
-            body = render_dashboard(record, policy).encode("utf-8")
+            query = dict(parse_qsl(urlparse(self.path).query))
+            search_results = None
+            search_message = ""
+            if query.get("search"):
+                if not policy.capabilities.get("huggingface", False) or policy.network == "none":
+                    search_message = "Enable Hugging Face and read-only network access before searching."
+                else:
+                    try:
+                        search_results = search_public_models(query["search"])
+                        search_message = f"Found {len(search_results)} public text-generation models."
+                    except Exception as error:  # network errors stay inside the UI
+                        search_message = f"Public search unavailable: {error}"
+            body = render_dashboard(record, policy, teacher, memory_gb, search_results, search_message).encode("utf-8")
             self.send_response(200)
             self.send_header("Content-Type", "text/html; charset=utf-8")
             self.send_header("Content-Length", str(len(body)))
@@ -62,6 +83,17 @@ def serve(root: str | Path = ".genesis", host: str = "127.0.0.1", port: int = 87
             fields = parse_qs(self.rfile.read(length).decode("utf-8"))
             name = fields.get("capability", [""])[0]
             enabled = fields.get("enabled", ["false"])[0].lower() == "true"
+            teacher_source = fields.get("teacher_source", [""])[0]
+            if teacher_source:
+                try:
+                    teacher = select_teacher(teacher_source, root)
+                except ValueError as error:
+                    self.send_error(400, str(error))
+                    return
+                self.send_response(303)
+                self.send_header("Location", "/#teacher")
+                self.end_headers()
+                return
             try:
                 policy.toggle_capability(name, enabled)
                 policy.save(Path(root) / "permissions.json")

@@ -288,6 +288,12 @@ pip install -e '.[hf]'
 
 The default test suite and offline baseline still work without the `hf` extra. This separation lets GENESIS use a real model while preserving clean, fast, reproducible development for the rest of the project. The model is intentionally a tiny integration checkpoint, not a claim of production-quality generation.
 
+## Teacher model onboarding
+
+Users do not need to know the Hub workflow in advance. The dashboard provides a Teacher Model center that recommends catalog entries using detected machine memory, accepts an exact `owner/model` identifier, accepts a Hugging Face URL, or accepts an existing local model directory. The selection is saved as `teacher.json` for later experiments.
+
+When the Hugging Face capability and read-only network permission are enabled, the dashboard can query the public Hub API on explicit request. Results include model ID, downloads, and likes, with a `Use` action for selecting a teacher. The teacher produces reviewable candidates inside the sandbox; it does not silently clone itself, replace GENESIS, install arbitrary code, or bypass evaluation.
+
 ## Contributing
 
 Start by reading [`docs/v0.1-spec.md`](docs/v0.1-spec.md), then choose the next incomplete daily work file. Keep changes small, add tests, preserve the offline path, and document any architecture change. Do not publish claims of improvement without the benchmark evidence that supports them.
