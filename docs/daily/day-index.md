@@ -5,15 +5,15 @@
 | 01 | Foundation and runnable package | COMPLETE |
 | 02 | Typed task, strategy, and experiment schemas | COMPLETE |
 | 03 | Events, logging, and status transitions | COMPLETE |
-| 04 | Offline mock provider and configuration | PLANNED |
-| 05 | SQLite metadata store and artifact references | PLANNED |
-| 06 | Independent benchmark evaluator | PLANNED |
-| 07 | Restricted local runner | PLANNED |
-| 08 | Researcher role | PLANNED |
-| 09 | Builder role and artifact validation | PLANNED |
-| 10 | Critic and failure classification | PLANNED |
-| 11 | Coordinator and complete lifecycle | PLANNED |
-| 12 | First end-to-end experiment | PLANNED |
+| 04 | Offline mock provider and configuration | COMPLETE |
+| 05 | SQLite metadata store and artifact references | COMPLETE |
+| 06 | Independent benchmark evaluator | COMPLETE |
+| 07 | Restricted local runner | COMPLETE |
+| 08 | Researcher role | COMPLETE |
+| 09 | Builder role and artifact validation | COMPLETE |
+| 10 | Critic and failure classification | COMPLETE |
+| 11 | Coordinator and complete lifecycle | COMPLETE |
+| 12 | First end-to-end experiment | COMPLETE |
 | 13 | Reproducibility identity and bundle | PLANNED |
 | 14 | Development, validation, and hidden splits | PLANNED |
 | 15 | Baselines and repeated trials | PLANNED |

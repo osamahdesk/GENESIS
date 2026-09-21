@@ -1,0 +1,11 @@
+flowchart LR
+    T[Task] --> H[Hypothesis]
+    H --> S[Strategy]
+    S --> I[Implementation]
+    I --> X[Restricted Execution]
+    X --> V[Independent Evaluation]
+    V --> Q[Critique]
+    Q --> M[Memory / Store]
+    M --> D{Decision}
+    D -->|verified| W[Verified Result]
+    D -->|rejected| F[Failure Record]

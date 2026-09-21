@@ -1,0 +1,14 @@
+flowchart TD
+    U[User / CLI] --> C[Coordinator]
+    C --> R[Researcher]
+    C --> B[Builder]
+    C --> X[Restricted Runner]
+    C --> E[Independent Evaluator]
+    C --> K[Critic]
+    C --> D[(SQLite Experiment DB)]
+    B --> A[(Artifact Store)]
+    X --> E
+    E --> K
+    K --> D
+    E --> D
+    D --> O[Auditable Result]
